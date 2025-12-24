@@ -1,0 +1,42 @@
+
+// app/api/v1/blog/delete/[id]/route.ts
+import { NextResponse } from "next/server";
+import path from "path";
+import { unlink } from "fs/promises";
+import Blog from "@/app/model/Blog.model";
+import { connectToDatabase } from "@/app/utils/db";
+
+export async function DELETE(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  await connectToDatabase();
+  const { id } = await context.params;
+
+  try {
+    const blog = await Blog.findOne({ id });
+    if (!blog) {
+      return NextResponse.json({ message: "Blog not found" }, { status: 404 });
+    }
+    
+    if (blog.image) {
+      const imagePath = path.join(process.cwd(), "public", "posts", "images", blog.image); 
+      try {
+        await unlink(imagePath);
+        console.log(`Deleted file: ${imagePath}`);
+      } catch (err: any) {
+        console.warn(`Failed to delete image: ${imagePath}`, err.message);
+      }
+    }
+    
+    await Blog.deleteOne({ id });
+
+    return NextResponse.json(
+      { message: "Blog and associated image deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Error deleting blog:", error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
