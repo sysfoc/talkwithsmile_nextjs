@@ -21,7 +21,7 @@ async function fetchAllData() {
         fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`, {
           method: "GET",
           credentials: "include",
-          cache: "no-store", // Ensures fresh data on each request
+          next: { revalidate: 0 }
         })
       )
     );
