@@ -21,7 +21,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import { Pen, Trash2 } from "lucide-react";
@@ -34,16 +33,14 @@ interface BlogUser {
 }
 
 interface Blog {
-  _id: string;
   id: string;
-  title: string;
+  h1: string;
   slug: string;
   image: string;
-  status: string;
-  author: string;
-  views: string | null;
-  type: string;
-  user_id: BlogUser | null;
+  view_counter: string;
+  user_id: string;
+  category_id: string;
+  user: BlogUser | null;
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -102,10 +99,9 @@ const Table = () => {
         const lowerSearch = searchTerm.toLowerCase().trim();
         return (
           blog.id?.toLowerCase().includes(lowerSearch) ||
-          blog.title?.toLowerCase().includes(lowerSearch) ||
+          blog.h1?.toLowerCase().includes(lowerSearch) ||
           blog.slug?.toLowerCase().includes(lowerSearch) ||
-          blog.author?.toLowerCase().includes(lowerSearch) ||
-          blog.user_id?.name?.toLowerCase().includes(lowerSearch)
+          blog.user?.name?.toLowerCase().includes(lowerSearch)
         );
       })
     : blogs;
@@ -121,22 +117,6 @@ const Table = () => {
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedBlogs = filteredBlogs.slice(startIndex, endIndex);
 
-  const getBlogTypeLabel = (type: string) => {
-    return type === "0"
-      ? "News Blog"
-      : type === "1"
-      ? "General Blog"
-      : "Unknown";
-  };
-
-  const getBlogTypeVariant = (type: string) => {
-    return type === "0" ? "destructive" : "default";
-  };
-
-  const getStatusVariant = (status: string) => {
-    return status === "published" ? "default" : "secondary";
-  };
-
   return (
     <div>
       <div className="mb-4 flex items-end justify-end">
@@ -144,7 +124,7 @@ const Table = () => {
           type="search"
           id="search"
           name="search"
-          placeholder="Search by title, slug, author, or ID..."
+          placeholder="Search by title, slug, or ID..."
           className="w-[350px] bg-transparent border border-[#fe4f70] focus-visible:ring-0"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -154,55 +134,45 @@ const Table = () => {
       <div className="overflow-x-auto">
         <TableWrapper>
           <TableCaption>A list of all blog posts</TableCaption>
-          <TableHeader className="bg-[#fe4f70]/70! hover:!bg-[#fe4f70]">
+          <TableHeader className="!bg-[#fe4f70]/70 hover:!bg-[#fe4f70]">
             <TableRow>
               <TableHead className="w-[80px]">ID</TableHead>
               <TableHead>Image</TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Slug</TableHead>
-              <TableHead>Author</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>Views</TableHead>
+              <TableHead>Category ID</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8">
+                <TableCell colSpan={7} className="text-center py-8">
                   Loading...
                 </TableCell>
               </TableRow>
             ) : paginatedBlogs.length > 0 ? (
               paginatedBlogs.map((blog) => (
-                <TableRow key={blog._id}>
+                <TableRow key={blog.id}>
                   <TableCell className="font-medium">{blog.id}</TableCell>
                   <TableCell>
                     <Image
-                      src={`/posts/images/${blog?.image}`}
-                      alt={blog.title}
+                      src={`/storage/blogpostimages/${blog.image}`}
+                      alt={blog.h1}
                       width={50}
                       height={50}
                       className="size-[50px] object-cover rounded"
                     />
                   </TableCell>
                   <TableCell className="max-w-[200px] truncate">
-                    {blog.title}
+                    {blog.h1}
                   </TableCell>
                   <TableCell className="max-w-[150px] truncate">
                     {blog.slug}
                   </TableCell>
-                  <TableCell>{blog.author}</TableCell>
-                  <TableCell>
-                    <Badge variant={getBlogTypeVariant(blog.type)}>
-                      {getBlogTypeLabel(blog.type)}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={getStatusVariant(blog.status)}>
-                      {blog.status}
-                    </Badge>
-                  </TableCell>
+                  <TableCell>{blog.view_counter || "0"}</TableCell>
+                  <TableCell>{blog.category_id}</TableCell>
                   <TableCell>
                     <div className="flex gap-x-2 items-center">
                       <Link
@@ -222,7 +192,7 @@ const Table = () => {
                             </AlertDialogTitle>
                             <AlertDialogDescription>
                               This action cannot be undone. This will
-                              permanently delete the blog post "{blog.title}"
+                              permanently delete the blog post "{blog.h1}"
                               and remove it from the database along with its
                               associated image.
                             </AlertDialogDescription>
@@ -244,7 +214,7 @@ const Table = () => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8">
+                <TableCell colSpan={7} className="text-center py-8">
                   No blogs found
                 </TableCell>
               </TableRow>

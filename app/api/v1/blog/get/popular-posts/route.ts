@@ -1,63 +1,36 @@
-// app/api/v1/blog/get/popular-posts/route.ts
-import Post from "@/app/model/Posts.model";
-import SubCategory from "@/app/model/SubCategory.model";
-import MainCategory from "@/app/model/MainCategory.model";
+// FILE: app/api/v1/blog/get/popular-posts/route.ts
+import Blog from "@/app/model/Blog.model";
+import Category from "@/app/model/Category.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET() {
   await connectToDatabase();
   
   try {
-    const posts = await Post.find({ views: { $gt: "0" } })
-      .sort({ views: -1 })
-      .limit(4)
-      .select("name slug title image created_at sub_category_id")
+    const blogs = await Blog.find({})
+      .sort({ view_counter: -1 })
+      .limit(5)
+      .select("id slug h1 image created_at category_id")
       .lean();
 
-    // Manually fetch subcategories
-    const subCategoryIds = [...new Set(posts.map(p => p.sub_category_id))];
-    const subCategories = await SubCategory.find({ id: { $in: subCategoryIds } })
-      .select("id name slug main_category_id")
+    const categoryIds = [...new Set(blogs.map((b) => b.category_id))];
+    const categories = await Category.find({ id: { $in: categoryIds } })
+      .select("id name slug")
       .lean();
-
-    const subCategoryMap = Object.fromEntries(
-      subCategories.map(sc => [sc.id, sc])
+    const categoryMap = Object.fromEntries(
+      categories.map((c) => [c.id, c])
     );
 
-    // Fetch main categories by MongoDB _id
-    const mainCategoryIds = [...new Set(subCategories.map((sc) => sc.main_category_id))];
-    const mainCategories = await MainCategory.find({ _id: { $in: mainCategoryIds } })
-      .select("_id name slug")
-      .lean();
+    const posts = blogs.map((blog) => ({
+      ...blog,
+      title: blog.h1,
+      category: categoryMap[blog.category_id] || null
+    }));
 
-    const mainCategoryMap = Object.fromEntries(
-      mainCategories.map((mc) => [(mc._id as any).toString(), mc])
-    );
-
-    const finalPosts = posts.map(post => {
-      const subCategory = subCategoryMap[post.sub_category_id];
-      const mainCategory = subCategory 
-        ? mainCategoryMap[(subCategory.main_category_id as any).toString()] 
-        : null;
-
-      return {
-        ...post,
-        subCategory: subCategory ? {
-          id: subCategory.id,
-          name: subCategory.name,
-          slug: subCategory.slug
-        } : null,
-        category: mainCategory ? {
-          name: mainCategory.name,
-          slug: mainCategory.slug
-        } : null
-      };
-    });
-
-    return NextResponse.json({ posts: finalPosts }, { status: 200 });
+    return NextResponse.json({ posts }, { status: 200 });
   } catch (error: any) {
-    console.log(error);
+    console.error("Error fetching popular posts:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

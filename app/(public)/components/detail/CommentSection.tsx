@@ -4,16 +4,17 @@ import { Textarea } from "@/components/ui/textarea";
 import React from "react";
 
 interface CommentSectionProps {
-  postId: string; // Changed from blogId to postId
+  postId: string;
 }
 
 const CommentSection = ({ postId }: CommentSectionProps) => {
   const [loading, setLoading] = React.useState(false);
   const [comments, setComments] = React.useState([]);
   const [formData, setFormData] = React.useState({
-    name: "",
+    fname: "",
+    lname: "",
     email: "",
-    comment: "",
+    body: "",
   });
 
   const getComments = async () => {
@@ -54,20 +55,29 @@ const CommentSection = ({ postId }: CommentSectionProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...formData, postId }), // Changed blogId to postId
+        body: JSON.stringify({
+          post_id: postId,
+          fname: formData.fname,
+          lname: formData.lname,
+          email: formData.email,
+          body: formData.body,
+          status: "0", // pending approval
+        }),
       });
       
       const data = await res.json();
       
       if (res.ok) {
         setFormData({
-          name: "",
+          fname: "",
+          lname: "",
           email: "",
-          comment: "",
+          body: "",
         });
+        alert("Comment submitted successfully!");
         getComments();
       } else {
-        alert(data.message || "Something went wrong");
+        alert(data.message || data.error || "Something went wrong");
       }
     } catch (error) {
       console.error("Error submitting comment:", error);
@@ -101,18 +111,33 @@ const CommentSection = ({ postId }: CommentSectionProps) => {
         </div>
       </div>
       <form className='my-6 flex flex-col gap-y-4' onSubmit={handleSubmit}>
-        <div className='flex flex-col gap-y-2'>
-          <Label htmlFor='name'>Name</Label>
-          <Input
-            type='text'
-            id='name'
-            name='name'
-            autoComplete='name'
-            placeholder='Enter your name'
-            required
-            value={formData.name}
-            onChange={handleChange}
-          />
+        <div className='flex flex-col md:flex-row gap-4'>
+          <div className='flex flex-col gap-y-2 flex-1'>
+            <Label htmlFor='fname'>First Name</Label>
+            <Input
+              type='text'
+              id='fname'
+              name='fname'
+              autoComplete='given-name'
+              placeholder='Enter your first name'
+              required
+              value={formData.fname}
+              onChange={handleChange}
+            />
+          </div>
+          <div className='flex flex-col gap-y-2 flex-1'>
+            <Label htmlFor='lname'>Last Name</Label>
+            <Input
+              type='text'
+              id='lname'
+              name='lname'
+              autoComplete='family-name'
+              placeholder='Enter your last name'
+              required
+              value={formData.lname}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         <div className='flex flex-col gap-y-2'>
           <Label htmlFor='email'>Email</Label>
@@ -128,16 +153,16 @@ const CommentSection = ({ postId }: CommentSectionProps) => {
           />
         </div>
         <div className='flex flex-col gap-y-2'>
-          <Label htmlFor='comment'>Comment*</Label>
+          <Label htmlFor='body'>Comment*</Label>
           <Textarea
-            id='comment'
-            name='comment'
+            id='body'
+            name='body'
             placeholder='Enter your comment'
             className='min-h-[100px]'
             required
-            value={formData.comment}
+            value={formData.body}
             onChange={(e) =>
-              setFormData({ ...formData, comment: e.target.value })
+              setFormData({ ...formData, body: e.target.value })
             }
           />
         </div>
@@ -181,10 +206,12 @@ const CommentSection = ({ postId }: CommentSectionProps) => {
                 className='border border-gray-200 rounded-xl p-4'
               >
                 <div className='flex items-center gap-x-2'>
-                  <h4 className='text-lg font-bold'>{comment.name}</h4>
+                  <h4 className='text-lg font-bold'>
+                    {comment.fname} {comment.lname}
+                  </h4>
                   <span className='text-xs text-gray-500'>
                     (
-                    {new Date(comment.createdAt).toLocaleDateString("en-US", {
+                    {new Date(comment.created_at).toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",
                       year: "numeric",
@@ -192,7 +219,7 @@ const CommentSection = ({ postId }: CommentSectionProps) => {
                     )
                   </span>
                 </div>
-                <p className='text-sm mt-2'>{comment.comment}</p>
+                <p className='text-sm mt-2'>{comment.body}</p>
               </div>
             ))
           ) : (

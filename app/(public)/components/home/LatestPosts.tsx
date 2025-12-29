@@ -1,18 +1,19 @@
+// FILE: app/(public)/components/home/LatestPosts.tsx
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 interface PostProps {
   data: any;
 }
+
 const LatestPosts = ({ data }: PostProps) => {
   return (
     <section className="mt-12">
-      {data?.map((post: any, index: number) => (
+      {data?.map((category: any, index: number) => (
         <div key={index}>
           <div className="my-4">
             <div className="flex items-center">
-              <h3 className="text-2xl font-bold capitalize">{post.name}</h3>
+              <h3 className="text-2xl font-bold capitalize">{category.name}</h3>
             </div>
             <div className="mt-2">
               <svg width="33" height="6" xmlns="https://www.w3.org/2000/svg">
@@ -38,53 +39,50 @@ const LatestPosts = ({ data }: PostProps) => {
             </div>
           </div>
           <div>
-            <div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-                {post?.blogs?.map((sub: any, index: number) => (
-                  <div
-                    key={index}
-                    className="border border-gray-200/70 rounded-xl"
-                  >
-                    <div className="w-full h-[200px] rounded-md overflow-hidden relative shrink-0">
-                      <Image
-                        src={`/posts/images/${sub?.image}`}
-                        alt={`${sub?.title}-img`}
-                        fill
-                        className="object-cover"
-                        fetchPriority="high"
-                        priority
-                      />
-                      <div className="absolute top-4 left-4">
-                        <button className="w-fit py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm capitalize">
-                          {sub?.subCategory?.name}
-                        </button>
-                      </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+              {category?.blogs?.map((blog: any, index: number) => (
+                <div
+                  key={index}
+                  className="border border-gray-200/70 rounded-xl"
+                >
+                  <div className="w-full h-[200px] rounded-md overflow-hidden relative shrink-0">
+                    <Image
+                      src={`/storage/blogpostimages/${blog?.image}`}
+                      alt={`${blog?.title}-img`}
+                      fill
+                      className="object-cover"
+                      fetchPriority="high"
+                      priority
+                    />
+                    <div className="absolute top-4 left-4">
+                      <button className="w-fit py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm capitalize">
+                        {category.name}
+                      </button>
                     </div>
-                    <div className="px-4 py-2">
-                      <Link
-                        href={`/category/${post?.slug}/${sub?.subCategory?.name}/${sub?.slug}`}
-                      >
-                        <h3 className="font-bold text-lg">
-                          {sub?.title.slice(0, 45)}...
-                        </h3>
-                      </Link>
-                      <div className="my-3 flex items-center justify-between gap-x-3">
-                        <p className="text-sm">By {sub?.uploaded_by}</p>
-                        <div className="w-1 h-1 rounded-full bg-[#FE4F70]" />
-                        <p className="text-sm">
-                          {new Date(
-                            sub?.created_at.replace(" ", "T")
-                          ).toLocaleDateString("en-US", {
+                  </div>
+                  <div className="px-4 py-2">
+                    <Link href={`/${category?.slug}/${blog?.slug}`}>
+                      <h3 className="font-bold text-lg">
+                        {blog?.title.slice(0, 45)}...
+                      </h3>
+                    </Link>
+                    <div className="my-3 flex items-center justify-between gap-x-3">
+                      <p className="text-sm">By {blog?.uploaded_by}</p>
+                      <div className="w-1 h-1 rounded-full bg-[#FE4F70]" />
+                      <p className="text-sm">
+                        {new Date(blog?.created_at).toLocaleDateString(
+                          "en-US",
+                          {
                             year: "numeric",
                             month: "long",
                             day: "numeric",
-                          })}
-                        </p>
-                      </div>
+                          }
+                        )}
+                      </p>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

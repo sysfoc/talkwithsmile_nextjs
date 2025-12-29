@@ -45,16 +45,6 @@ const items = [
     icon: Folder,
   },
   {
-    title: "Sub-categories",
-    url: "/admin/sub-category",
-    icon: Tag,
-  },
-  {
-    title: "Posts",
-    url: "/admin/posts",
-    icon: Pencil,
-  },
-  {
     title: "Blogs",
     url: "/admin/blog-posts",
     icon: Rss,

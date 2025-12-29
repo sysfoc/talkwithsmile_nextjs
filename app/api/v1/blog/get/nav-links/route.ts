@@ -1,37 +1,21 @@
 // app/api/v1/blog/get/nav-links/route.ts
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/app/utils/db";
-import Category from "@/app/model/MainCategory.model";
-import SubCategory from "@/app/model/SubCategory.model";
+import Category from "@/app/model/Category.model";
 
 export async function GET() {
   try {
     await connectToDatabase();
-    const categories = await Category.find({}, "name slug").lean();
+    
+    const categories = await Category.find({})
+      .select("name slug")
+      .lean();
 
-    const result = await Promise.all(
-      categories.map(async (cat) => {
-        const subcategories = await SubCategory.find(
-          { main_category_id: cat._id },
-          "name slug"
-        ).lean();
-
-        return {
-          categoryName: cat.name,
-          categorySlug: cat.slug,
-          subcategories: subcategories.map((sub) => ({
-            name: sub.name,
-            slug: sub.slug,
-          })),
-        };
-      })
-    );
-
-    return NextResponse.json({ success: true, categories: result });
+    return NextResponse.json({ success: true, categories }, { status: 200 });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json(
-      { success: false, message: "Failed to fetch category names and slugs" },
+      { success: false, message: "Failed to fetch navigation links" },
       { status: 500 }
     );
   }

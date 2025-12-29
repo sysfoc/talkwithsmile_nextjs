@@ -13,7 +13,13 @@ export async function PATCH(
   await connectToDatabase();
   
   try {
-    const updateData: any = { name, email };
+    const updateData: any = { 
+      name, 
+      email,
+      email_verified_at: null,
+      remember_token: null,
+      updated_at: new Date().toISOString()
+    };
     
     if (password && password.trim() !== "") {
       const encryptedPassword = await hashedPassword(password);
@@ -21,7 +27,7 @@ export async function PATCH(
     }
     
     await User.findOneAndUpdate(
-      { user_id: id },
+      { id },
       updateData,
       { new: true }
     );

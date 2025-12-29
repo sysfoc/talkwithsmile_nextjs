@@ -1,5 +1,5 @@
 // app/api/v1/category/get-all/route.ts
-import MainCategory from "@/app/model/MainCategory.model";
+import Category from "@/app/model/Category.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
 
@@ -7,9 +7,9 @@ export async function GET() {
   await connectToDatabase();
   
   try {
-    const categories = await MainCategory.find({})
-      .sort({ createdAt: -1 })
-      .select("_id name slug metaTitle metaDescription h1Title createdAt updatedAt");
+    const categories = await Category.find({})
+      .sort({ created_at: -1 })
+      .select("id name slug homeh3s title description h1 created_at updated_at");
     
     return NextResponse.json(
       { categories, count: categories.length },

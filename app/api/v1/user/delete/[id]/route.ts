@@ -10,7 +10,7 @@ export async function DELETE(
   const { id } = await context.params;
   await connectToDatabase();
   try {
-    await User.findOneAndDelete({ user_id: id });
+    await User.findOneAndDelete({ id });
     return NextResponse.json(
       { message: "User deleted successfully" },
       { status: 200 }

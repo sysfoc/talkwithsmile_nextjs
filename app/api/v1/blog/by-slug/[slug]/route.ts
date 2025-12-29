@@ -20,16 +20,15 @@ export async function GET(
 
     const blog = blogDoc.toObject();
 
-    // Fetch user manually if user_id exists
-    let user_id = null;
+    let user = null;
     if (blog.user_id) {
-      const userDoc = await User.findOne({ user_id: blog.user_id }).select("name email");
-      user_id = userDoc ? { name: userDoc.name, email: userDoc.email } : null;
+      const userDoc = await User.findOne({ id: blog.user_id }).select("name email");
+      user = userDoc ? { name: userDoc.name, email: userDoc.email } : null;
     }
 
     const finalBlog = {
       ...blog,
-      user_id,
+      user,
     };
 
     return NextResponse.json({ blog: finalBlog }, { status: 200 });
@@ -38,4 +37,3 @@ export async function GET(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-

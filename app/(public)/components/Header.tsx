@@ -5,6 +5,7 @@ import React from "react";
 import Navlinks from "@/app/(public)/components/navbar/Navlinks";
 import Darkmode from "@/app/(public)/components/navbar/Darkmode";
 import MobileNav from "@/app/(public)/components/navbar/MobileNav";
+import SearchBar from "./navbar/SearchBar";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -40,15 +41,15 @@ const Header = () => {
     getNavLinks();
   }, []);
   return (
-    <header className='shadow-md relative z-99'>
+    <header className='md:shadow-md relative z-99 bg-[#030712]'>
       <div className='flex items-center justify-between mx-4 md:mx-12 py-3'>
         <div className='flex items-center gap-x-3'>
           <Link href="/">
           <Image
-            src='/logo-no-background.png'
+            src='/Site-logo-white.png'
             alt='logo'
-            width={50}
-            height={30}
+            width={80}
+            height={70}
             className='size-auto'
             fetchPriority='high'
             priority
@@ -57,6 +58,7 @@ const Header = () => {
         </div>
         <Navlinks navLinks={navLinks} />
         <div className='flex items-center gap-x-3'>
+          <SearchBar />
           <Darkmode />
           <div className='md:hidden'>
             <MobileNav navLinks={navLinks} />

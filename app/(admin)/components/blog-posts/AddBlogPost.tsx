@@ -1,7 +1,7 @@
 // app/(admin)/components/blog-posts/AddBlogPost.tsx
 "use client";
 import dynamic from "next/dynamic";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,34 +16,49 @@ import { useRouter } from "next/navigation";
 const LazyJoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 interface FormData {
-  title: string;
-  description: string;
+  h1: string;
+  content: string;
   image: File | null;
   slug: string;
-  metatitle: string;
-  metadesc: string;
-  author: string;
-  type: string;
-  status: string;
+  meta_title: string;
+  meta_desc: string;
+  category_id: string;
+  additional_data: string;
 }
 
 const AddBlogPost = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [categories, setCategories] = useState([]);
   const router = useRouter();
   
   const [formData, setFormData] = useState<FormData>({
-    title: "",
-    description: "",
+    h1: "",
+    content: "",
     image: null,
     slug: "",
-    metatitle: "",
-    metadesc: "",
-    author: "",
-    type: "1",
-    status: "draft",
+    meta_title: "",
+    meta_desc: "",
+    category_id: "",
+    additional_data: "",
   });
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/v1/category/get-all", {
+          method: "GET",
+          credentials: "include",
+        });
+        const data = await res.json();
+        setCategories(data.categories || []);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const config = {
     placeholder: "Start typing...",
@@ -68,7 +83,7 @@ const AddBlogPost = () => {
   const handleContentChange = (newContent: string) => {
     setFormData((prev) => ({
       ...prev,
-      description: newContent,
+      content: newContent,
     }));
   };
 
@@ -88,7 +103,7 @@ const AddBlogPost = () => {
         [name]: value,
       };
 
-      if (name === "title") {
+      if (name === "h1") {
         updated.slug = value
           .toLowerCase()
           .trim()
@@ -100,17 +115,10 @@ const AddBlogPost = () => {
     });
   };
 
-  const handleTypeChange = (value: string) => {
+  const handleCategoryChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
-      type: value,
-    }));
-  };
-
-  const handleStatusChange = (value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      status: value,
+      category_id: value,
     }));
   };
 
@@ -122,14 +130,13 @@ const AddBlogPost = () => {
 
     try {
       const form = new FormData();
-      form.append("title", formData.title);
-      form.append("description", formData.description);
-      form.append("metatitle", formData.metatitle);
-      form.append("metadesc", formData.metadesc);
+      form.append("h1", formData.h1);
+      form.append("content", formData.content);
+      form.append("meta_title", formData.meta_title);
+      form.append("meta_desc", formData.meta_desc);
       form.append("slug", formData.slug);
-      form.append("author", formData.author);
-      form.append("type", formData.type);
-      form.append("status", formData.status);
+      form.append("category_id", formData.category_id);
+      form.append("additional_data", formData.additional_data);
 
       if (formData.image) {
         form.append("image", formData.image);
@@ -145,15 +152,14 @@ const AddBlogPost = () => {
       if (res.ok) {
         router.push("/admin/blog-posts");
         setFormData({
-          title: "",
-          description: "",
+          h1: "",
+          content: "",
           image: null,
           slug: "",
-          metatitle: "",
-          metadesc: "",
-          author: "",
-          type: "1",
-          status: "draft",
+          meta_title: "",
+          meta_desc: "",
+          category_id: "",
+          additional_data: "",
         });
       } else {
         setError(true);
@@ -177,43 +183,43 @@ const AddBlogPost = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
-          <Label htmlFor="metatitle">Meta Title</Label>
+          <Label htmlFor="meta_title">Meta Title</Label>
           <Input
             type="text"
-            id="metatitle"
-            name="metatitle"
+            id="meta_title"
+            name="meta_title"
             placeholder="Meta Title"
             className="border border-black placeholder:text-black"
             required
-            value={formData.metatitle}
+            value={formData.meta_title}
             onChange={handleChange}
           />
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="metadesc">Meta Description</Label>
+          <Label htmlFor="meta_desc">Meta Description</Label>
           <Input
             type="text"
-            id="metadesc"
-            name="metadesc"
+            id="meta_desc"
+            name="meta_desc"
             placeholder="Meta Description"
             className="border border-black placeholder:text-black"
             required
-            value={formData.metadesc}
+            value={formData.meta_desc}
             onChange={handleChange}
           />
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="title">Title</Label>
+          <Label htmlFor="h1">Title (H1)</Label>
           <Input
             type="text"
-            id="title"
-            name="title"
+            id="h1"
+            name="h1"
             placeholder="Blog Title"
             className="border border-black placeholder:text-black"
             required
-            value={formData.title}
+            value={formData.h1}
             onChange={handleChange}
           />
         </div>
@@ -233,43 +239,32 @@ const AddBlogPost = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="author">Author</Label>
+          <Label htmlFor="category_id">Category</Label>
+          <Select value={formData.category_id} onValueChange={handleCategoryChange}>
+            <SelectTrigger className="border border-black">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((category: any) => (
+                <SelectItem key={category.id} value={category.id}>
+                  {category.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="additional_data">Additional Data (Optional)</Label>
           <Input
             type="text"
-            id="author"
-            name="author"
-            placeholder="Author name"
+            id="additional_data"
+            name="additional_data"
+            placeholder="Additional Data"
             className="border border-black placeholder:text-black"
-            required
-            value={formData.author}
+            value={formData.additional_data}
             onChange={handleChange}
           />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="type">Blog Type</Label>
-          <Select value={formData.type} onValueChange={handleTypeChange}>
-            <SelectTrigger className="border border-black">
-              <SelectValue placeholder="Select blog type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">General Blog</SelectItem>
-              <SelectItem value="0">News Blog</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="status">Status</Label>
-          <Select value={formData.status} onValueChange={handleStatusChange}>
-            <SelectTrigger className="border border-black">
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="draft">Draft</SelectItem>
-              <SelectItem value="published">Published</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         <div className="flex flex-col gap-2">
@@ -289,7 +284,7 @@ const AddBlogPost = () => {
           <Label>Blog Content</Label>
           <Suspense fallback={<p>Loading editor...</p>}>
             <LazyJoditEditor
-              value={formData.description}
+              value={formData.content}
               config={config}
               tabIndex={1}
               onBlur={handleContentChange}

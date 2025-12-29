@@ -1,4 +1,3 @@
-// app/(public)/components/category/CategoryPosts.tsx
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,23 +6,30 @@ import Pagination from "@/app/(admin)/components/common/Pagination";
 
 interface Props {
   blogs: any[];
+  categorySlug: string;
 }
 
 const ITEMS_PER_PAGE = 15;
 
-const CategoryPosts = ({ blogs: data }: Props) => {
+const CategoryPosts = ({ blogs: data, categorySlug }: Props) => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Reset to page 1 when data changes
   useEffect(() => {
     setCurrentPage(1);
   }, [data]);
 
-  // Calculate pagination
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedData = data.slice(startIndex, endIndex);
+
+  if (data.length === 0) {
+    return (
+      <div className="border border-gray-200/70 rounded-xl p-8 text-center">
+        <p className="text-gray-500">No posts found in this category.</p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -32,25 +38,22 @@ const CategoryPosts = ({ blogs: data }: Props) => {
           <div className="flex flex-col">
             {paginatedData?.map((post, index) => (
               <div
-                key={post?._id}
+                key={post?.id || post?._id}
                 className={`flex items-center flex-wrap md:flex-nowrap gap-x-5 pb-4 ${
                   index !== 0 ? "pt-4 border-t border-gray-200/70" : ""
                 }`}
               >
                 <div className="w-full md:w-[300px] h-[300px] md:h-[200px] rounded-md overflow-hidden relative shrink-0">
                   <Image
-                    src={`/posts/images/${post?.image}`}
-                    alt="blog-image"
+                    src={`/storage/blogpostimages/${post?.image}`}
+                    alt={post?.h1 || "blog-image"}
                     fill
                     className="object-cover"
                     fetchPriority="high"
-                    priority
+                    priority={index < 3}
                   />
                 </div>
                 <div className="break-words">
-                  <p className="w-fit mb-3 py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm capitalize">
-                    {post?.subCategory?.name}
-                  </p>
                   <div className="my-3 flex items-center gap-x-5">
                     <div className="flex items-center gap-x-3">
                       <div className="relative w-8 h-8">
@@ -61,30 +64,26 @@ const CategoryPosts = ({ blogs: data }: Props) => {
                           className="object-cover rounded-full"
                         />
                       </div>
-                      <p className="text-sm font-semibold">{post?.uploaded_by}</p>
+                      <p className="text-sm font-semibold">
+                        {post?.user?.name || "Anonymous"}
+                      </p>
                     </div>
                     <div className="w-1 h-1 rounded-full bg-[#FE4F70]" />
                     <p className="text-sm">
-                      {new Date(
-                        post?.created_at.replace(" ", "T")
-                      ).toLocaleDateString("en-US", {
+                      {new Date(post?.created_at).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
                       })}
                     </p>
                   </div>
-                  <Link
-                    href={`/category/${post?.category?.name}/${post?.subCategory?.name}/${post?.slug}`}
-                  >
-                    <h3 className="font-bold text-xl">{post?.title}</h3>
+                  <Link href={`/${categorySlug}/${post?.slug}`}>
+                    <h3 className="font-bold text-xl hover:text-[#FE4F70] transition-colors">
+                      {post?.h1}
+                    </h3>
                   </Link>
                   <p className="text-gray-400 my-2 line-clamp-2">
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html: post?.content,
-                      }}
-                    />
+                    {post?.meta_desc}
                   </p>
                 </div>
               </div>

@@ -56,9 +56,9 @@ const Table = () => {
     ? formData.filter((category: any) => {
         const lowerSearch = searchTerm.toLowerCase().trim();
         return (
-          category?._id?.toString().toLowerCase().includes(lowerSearch) ||
+          category?.id?.toLowerCase().includes(lowerSearch) ||
           category?.name?.toLowerCase().includes(lowerSearch) ||
-          category?.h1Title?.toLowerCase().includes(lowerSearch)
+          category?.h1?.toLowerCase().includes(lowerSearch)
         );
       })
     : formData;
@@ -121,14 +121,14 @@ const Table = () => {
             )}
             {paginatedCategories?.length > 0 ? (
               paginatedCategories.map((category: any) => (
-                <TableRow key={category._id}>
-                  <TableCell>{category._id.slice(0, 13)}...</TableCell>
+                <TableRow key={category.id}>
+                  <TableCell>{category.id}</TableCell>
                   <TableCell className='capitalize'>{category.name}</TableCell>
-                  <TableCell>{category.h1Title}</TableCell>
+                  <TableCell>{category.h1}</TableCell>
                   <TableCell>
                     <div className='flex gap-x-2 items-center'>
                       <Link
-                        href={`/admin/category/edit/${category._id}`}
+                        href={`/admin/category/edit/${category.id}`}
                         className='bg-green-500 text-white px-2 py-2 rounded'
                       >
                         <Pen size={12} />
@@ -151,7 +151,7 @@ const Table = () => {
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction
-                              onClick={() => handleDeleteCategory(category._id)}
+                              onClick={() => handleDeleteCategory(category.id)}
                             >
                               Continue
                             </AlertDialogAction>

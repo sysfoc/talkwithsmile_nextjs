@@ -56,7 +56,7 @@ const Table = () => {
     ? formData.filter((user: any) => {
         const lowerSearch = searchTerm.toLowerCase().trim();
         return (
-          user?.user_id?.toLowerCase().includes(lowerSearch) ||
+          user?.id?.toLowerCase().includes(lowerSearch) ||
           user?.name?.toLowerCase().includes(lowerSearch) ||
           user?.email?.toLowerCase().includes(lowerSearch)
         );
@@ -121,14 +121,14 @@ const Table = () => {
             )}
             {paginatedUsers?.length > 0 ? (
               paginatedUsers.map((user: any) => (
-                <TableRow className="relative" key={user.user_id}>
-                  <TableCell>{user.user_id}</TableCell>
+                <TableRow className="relative" key={user.id}>
+                  <TableCell>{user.id}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <div className="flex gap-x-2 items-center">
                       <Link
-                        href={`/admin/users/edit/${user.user_id}`}
+                        href={`/admin/users/edit/${user.id}`}
                         className="bg-green-500 text-white px-2 py-2 rounded"
                       >
                         <Pen size={12} />
@@ -151,7 +151,7 @@ const Table = () => {
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction
-                              onClick={() => handleDeleteUser(user.user_id)}
+                              onClick={() => handleDeleteUser(user.id)}
                             >
                               Continue
                             </AlertDialogAction>

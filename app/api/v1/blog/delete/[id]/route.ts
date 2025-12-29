@@ -1,4 +1,3 @@
-
 // app/api/v1/blog/delete/[id]/route.ts
 import { NextResponse } from "next/server";
 import path from "path";
@@ -20,10 +19,9 @@ export async function DELETE(
     }
     
     if (blog.image) {
-      const imagePath = path.join(process.cwd(), "public", "posts", "images", blog.image); 
+      const imagePath = path.join(process.cwd(), "public", "storage", "blogpostimages", blog.image); 
       try {
         await unlink(imagePath);
-        console.log(`Deleted file: ${imagePath}`);
       } catch (err: any) {
         console.warn(`Failed to delete image: ${imagePath}`, err.message);
       }

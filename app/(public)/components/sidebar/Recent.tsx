@@ -1,3 +1,4 @@
+// FILE: app/(public)/components/sidebar/Recent.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { FaFireFlameCurved } from "react-icons/fa6";
@@ -6,6 +7,7 @@ interface Props {
   data: any;
   loading: boolean;
 }
+
 const Recent = ({ data: blogs, loading }: Props) => {
   return (
     <div className="px-4 border border-gray-200 rounded-xl">
@@ -33,7 +35,7 @@ const Recent = ({ data: blogs, loading }: Props) => {
       </div>
       <div className="mt-4 flex flex-col">
         {loading
-          ? Array.from({ length: 4 }).map((_, index) => (
+          ? Array.from({ length: 5 }).map((_, index) => (
               <div
                 key={index}
                 className="flex items-center justify-center gap-x-2 mb-4"
@@ -45,14 +47,14 @@ const Recent = ({ data: blogs, loading }: Props) => {
                 </div>
               </div>
             ))
-          : blogs?.slice(0, 4)?.map((post: any, index: number) => (
+          : blogs?.slice(0, 5)?.map((post: any, index: number) => (
               <div
                 key={index}
                 className="flex items-center gap-x-5 border-t border-gray-200/70 py-4"
               >
                 <div className="w-[65px] h-[65px] rounded-full overflow-hidden relative shrink-0">
                   <Image
-                    src={`/posts/images/${post?.image}`}
+                    src={`/storage/blogpostimages/${post?.image}`}
                     alt={`${post?.title}-img`}
                     fill
                     className="object-cover"
@@ -61,9 +63,7 @@ const Recent = ({ data: blogs, loading }: Props) => {
                   />
                 </div>
                 <div>
-                  <Link
-                    href={`/category/${post?.category?.slug}/${post?.subCategory?.slug}/${post?.slug}`}
-                  >
+                   <Link href={`/${post?.category?.slug}/${post?.slug}`}>
                     <h3 className="font-bold">{post?.title}</h3>
                   </Link>
                   <p className="text-xs text-gray-400 mt-1">

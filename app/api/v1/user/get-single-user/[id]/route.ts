@@ -10,7 +10,7 @@ export async function GET(
   const { id } = await context.params;
   await connectToDatabase();
   try {
-    const user = await User.findOne({ user_id: id }).select("-password");
+    const user = await User.findOne({ id }).select("-password");
     return NextResponse.json({ user }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

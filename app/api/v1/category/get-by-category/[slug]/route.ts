@@ -1,5 +1,5 @@
 // app/api/v1/category/get-by-category/[slug]/route.ts
-import MainCategory from "@/app/model/MainCategory.model";
+import Category from "@/app/model/Category.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
 
@@ -11,7 +11,7 @@ export async function GET(
     await connectToDatabase();
     const { slug } = await params;
     
-    const category = await MainCategory.findOne({ slug });
+    const category = await Category.findOne({ slug });
     
     if (!category) {
       return NextResponse.json(

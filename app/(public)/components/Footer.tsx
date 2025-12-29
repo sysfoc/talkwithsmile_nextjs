@@ -16,7 +16,7 @@ const Footer = () => {
         <div className='flex items-center justify-between flex-wrap gap-x-6 gap-y-5 py-6'>
           <Link href="/">
             <Image
-              src='/logo-no-background.png'
+              src='/Site-logo-white.png'
               alt='logo'
               width={80}
               height={50}
@@ -41,12 +41,6 @@ const Footer = () => {
             <Link href='/privacy-policy' className='text-sm text-gray-500'>
               Privacy Policy
             </Link>
-            <Link href='/disclaimer' className='text-sm text-gray-500'>
-              Disclaimer
-            </Link>
-            <Link href='/advertise-with-us' className='text-sm text-gray-500'>
-              Advertise with us
-            </Link>
           </div>
         </div>
         <div className='border-t' />
@@ -64,6 +58,7 @@ const Footer = () => {
               <Link
                 href='https://www.facebook.com/networthmamadotcom'
                 target='_blank'
+                aria-label='Facebook'
               >
                 <FaFacebook size={20} className='text-gray-500' />
               </Link>
@@ -72,12 +67,13 @@ const Footer = () => {
               <Link
                 href='https://www.instagram.com/nethworthmama/'
                 target='_blank'
+                aria-label='Instagram'
               >
                 <FaInstagram size={20} className='text-gray-500' />
               </Link>
             </div>
             <div>
-              <Link href='https://x.com/networthMama' target='_blank'>
+              <Link href='https://x.com/networthMama' target='_blank' aria-label='Twitter'>
                 <FaXTwitter size={20} className='text-gray-500' />
               </Link>
             </div>
@@ -85,6 +81,7 @@ const Footer = () => {
               <Link
                 href='https://www.pinterest.com/networthmama/'
                 target='_blank'
+                aria-label='Pinterest'
               >
                 <FaPinterest size={20} className='text-gray-500' />
               </Link>
@@ -93,6 +90,7 @@ const Footer = () => {
               <Link
                 href='https://www.youtube.com/@Networthmama.'
                 target='_blank'
+                aria-label='Youtube'
               >
                 <FaYoutube size={20} className='text-gray-500' />
               </Link>

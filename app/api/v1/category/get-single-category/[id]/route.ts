@@ -1,5 +1,5 @@
 // app/api/v1/category/get-single-category/[id]/route.ts
-import MainCategory from "@/app/model/MainCategory.model";
+import Category from "@/app/model/Category.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
 
@@ -11,7 +11,7 @@ export async function GET(
     await connectToDatabase();
     const { id } = await params;
     
-    const category = await MainCategory.findById(id);
+    const category = await Category.findOne({ id });
     
     if (!category) {
       return NextResponse.json(

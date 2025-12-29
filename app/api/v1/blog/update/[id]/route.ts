@@ -14,14 +14,13 @@ export async function PATCH(
   const { id } = await context.params;
   const formData = await req.formData();
 
-  const title = formData.get("title") as string | null;
-  const description = formData.get("description") as string | null;
-  const metatitle = formData.get("metatitle") as string | null;
-  const metadesc = formData.get("metadesc") as string | null;
+  const h1 = formData.get("h1") as string | null;
+  const meta_title = formData.get("meta_title") as string | null;
+  const meta_desc = formData.get("meta_desc") as string | null;
+  const content = formData.get("content") as string | null;
   const slug = formData.get("slug") as string | null;
-  const author = formData.get("author") as string | null;
-  const type = formData.get("type") as string | null;
-  const status = formData.get("status") as string | null;
+  const category_id = formData.get("category_id") as string | null;
+  const additional_data = formData.get("additional_data") as string | null;
   const image = formData.get("image");
 
   try {
@@ -36,7 +35,7 @@ export async function PATCH(
       const buffer = Buffer.from(await image.arrayBuffer());
 
       if (blogDoc.image) {
-        const oldPath = path.join(process.cwd(), "public", blogDoc.image);
+        const oldPath = path.join(process.cwd(), "public","storage", "blogpostimages", blogDoc.image);
         try {
           await unlink(oldPath);
         } catch (err: any) {
@@ -45,24 +44,26 @@ export async function PATCH(
       }
 
       const filename = `${Date.now()}-${image.name}`;
-      const fullPath = path.join(process.cwd(), "public", "posts", "images", filename);
+      const fullPath = path.join(process.cwd(), "public", "storage", "blogpostimages", filename);
       await writeFile(fullPath, buffer);
       imagePath = filename;
     }
 
+    const currentTimestamp = new Date().toISOString();
+
     const updatedBlogDoc = await Blog.findOneAndUpdate(
       { id },
       {
-        title,
-        description,
-        metatitle,
-        metadesc,
-        image: imagePath,
+        h1,
+        meta_title,
+        meta_desc,
+        content,
         slug,
-        author,
-        type: type || null,
-        status,
-        updated_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        image: imagePath,
+        category_id,
+        additional_data: additional_data || null,
+        updated_at: currentTimestamp,
+        post_updated_on: currentTimestamp,
       },
       { new: true, runValidators: true }
     );
@@ -73,16 +74,15 @@ export async function PATCH(
 
     const updatedBlog = updatedBlogDoc.toObject();
 
-    // Fetch user manually if user_id exists - FIXED: Query by user_id field
-    let user_id = null;
+    let user = null;
     if (updatedBlog.user_id) {
-      const userDoc = await User.findOne({ user_id: updatedBlog.user_id }).select("name email");
-      user_id = userDoc ? { name: userDoc.name, email: userDoc.email } : null;
+      const userDoc = await User.findOne({ id: updatedBlog.user_id }).select("name email");
+      user = userDoc ? { name: userDoc.name, email: userDoc.email } : null;
     }
 
     const finalBlog = {
       ...updatedBlog,
-      user_id,
+      user,
     };
 
     return NextResponse.json({ blog: finalBlog }, { status: 200 });

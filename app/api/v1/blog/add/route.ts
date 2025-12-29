@@ -29,33 +29,23 @@ export async function POST(req: Request) {
   const userId = decoded.id;
   const formData = await req.formData();
 
-  const title = formData.get("title") as string | null;
-  const description = formData.get("description") as string | null;
-  const metatitle = formData.get("metatitle") as string | null;
-  const metadesc = formData.get("metadesc") as string | null;
+  const h1 = formData.get("h1") as string | null;
+  const meta_title = formData.get("meta_title") as string | null;
+  const meta_desc = formData.get("meta_desc") as string | null;
+  const content = formData.get("content") as string | null;
   const slug = formData.get("slug") as string | null;
-  const author = formData.get("author") as string | null;
   const image = formData.get("image") as File | null;
-  const type = formData.get("type") as string | null;
-  const status = formData.get("status") as string | null;
+  const category_id = formData.get("category_id") as string | null;
+  const additional_data = formData.get("additional_data") as string | null;
 
-  if (
-    !title ||
-    !description ||
-    !metatitle ||
-    !metadesc ||
-    !image ||
-    !slug ||
-    !author
-  ) {
+  if (!h1 || !meta_title || !meta_desc || !content || !slug || !image || !category_id) {
     return NextResponse.json(
-      { message: "Please fill complete form" },
+      { message: "Please fill all required fields" },
       { status: 400 }
     );
   }
 
-  // Use findOne with custom user_id field, not findById
-  const user = await User.findOne({ user_id: userId });
+  const user = await User.findOne({ id: userId });
   if (!user) {
     return NextResponse.json({ message: "User not found" }, { status: 404 });
   }
@@ -69,7 +59,6 @@ export async function POST(req: Request) {
   }
 
   try {
-    // Generate incremented blog id (highest one)
     const allBlogs = await Blog.find({}, { id: 1 }).lean();
 
     let maxBlogId = 0;
@@ -87,27 +76,29 @@ export async function POST(req: Request) {
     const imagePath = path.join(
       process.cwd(),
       "public",
-      "posts",
-      "images",
+      "storage",
+      "blogpostimages",
       filename
     );
     await writeFile(imagePath, buffer);
 
+    const currentTimestamp = new Date().toISOString();
+
     const blog = await Blog.create({
       id: nextId,
-      user_id: userId,
-      title,
-      description,
-      metatitle,
-      metadesc,
-      image: filename,
       slug,
-      author,
-      type: type || null,
-      status: status || "draft",
-      timestamp: new Date(),
-      created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
-      updated_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+      h1,
+      meta_title,
+      meta_desc,
+      content,
+      image: filename,
+      view_counter: "0",
+      user_id: userId,
+      category_id,
+      additional_data: additional_data || null,
+      created_at: currentTimestamp,
+      updated_at: currentTimestamp,
+      post_updated_on: null,
     });
 
     return NextResponse.json(

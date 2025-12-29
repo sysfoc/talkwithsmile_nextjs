@@ -10,22 +10,21 @@ export async function GET() {
   try {
     const blogs = await Blog.find({})
       .sort({ created_at: -1 })
-      .select("_id id title slug image type status author views")
+      .select("id slug h1 meta_title image view_counter user_id category_id created_at")
       .lean();
 
-    // Manually fetch users
     const userIds = [...new Set(blogs.map((b) => b.user_id).filter(Boolean))];
-    const users = (await User.find({ _id: { $in: userIds } })
-      .select("name email")
-      .lean()) as any[];
+    const users = await User.find({ id: { $in: userIds } })
+      .select("id name email")
+      .lean();
 
     const userMap = Object.fromEntries(
-      users.map((u) => [u._id.toString(), { name: u.name, email: u.email }])
+      users.map((u) => [u.id, { name: u.name, email: u.email }])
     );
 
     const finalBlogs = blogs.map((blog) => ({
       ...blog,
-      user_id: blog.user_id ? userMap[blog.user_id] || null : null,
+      user: blog.user_id ? userMap[blog.user_id] || null : null,
     }));
 
     return NextResponse.json({ blogs: finalBlogs }, { status: 200 });

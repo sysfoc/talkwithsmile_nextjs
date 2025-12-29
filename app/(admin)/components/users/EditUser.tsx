@@ -1,3 +1,4 @@
+// app/(admin)/components/users/EditUser.tsx
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +12,7 @@ const EditUser = () => {
   const params = useParams();
   const router = useRouter();
   const [formData, setFormData] = React.useState({
-    user_id: "",
+    id: "",
     name: "",
     email: "",
     password: "",
@@ -25,7 +26,7 @@ const EditUser = () => {
       });
       const data = await res.json();
       setFormData({
-        user_id: data.user.user_id || "",
+        id: data.user.id || "",
         name: data.user.name || "",
         email: data.user.email || "",
         password: "",
@@ -56,7 +57,7 @@ const EditUser = () => {
         payload.password = formData.password;
       }
       
-      const res = await fetch(`/api/v1/user/update/${formData.user_id}`, {
+      const res = await fetch(`/api/v1/user/update/${formData.id}`, {
         method: "PATCH",
         credentials: "include",
         headers: {

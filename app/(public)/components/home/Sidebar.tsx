@@ -99,7 +99,7 @@ const Sidebar = () => {
       <Recent data={editorsBlogs} loading={loading} />
       <Topics data={topics} loading={loading} />
       {/* <Newsletter /> */}
-      <Tags data={topics} loading={loading} />
+      {/* <Tags data={topics} loading={loading} /> */}
     </aside>
   );
 };

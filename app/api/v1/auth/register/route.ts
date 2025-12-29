@@ -57,26 +57,30 @@ export async function POST(req: Request) {
       );
     }
 
-    // Generate incremented user_id
-    const allUsers = await User.find({}, { user_id: 1 }).lean();
+    const allUsers = await User.find({}, { id: 1 }).lean();
     
     let maxUserId = 0;
     allUsers.forEach(user => {
-      const id = parseInt(user.user_id);
-      if (!isNaN(id) && id > maxUserId) {
-        maxUserId = id;
+      const userId = parseInt(user.id);
+      if (!isNaN(userId) && userId > maxUserId) {
+        maxUserId = userId;
       }
     });
     
     const newUserId = (maxUserId + 1).toString();
+    const currentTimestamp = new Date().toISOString();
 
     const encryptedPassword = await hashedPassword(password);
     
     await User.create({
-      user_id: newUserId,
+      id: newUserId,
       name,
       email,
       password: encryptedPassword,
+      email_verified_at: null,
+      remember_token: null,
+      created_at: currentTimestamp,
+      updated_at: currentTimestamp,
     });
 
     return NextResponse.json(

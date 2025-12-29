@@ -1,42 +1,59 @@
 // app/api/v1/category/add/route.ts
-import MainCategory from "@/app/model/MainCategory.model";
+import Category from "@/app/model/Category.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   await connectToDatabase();
-  const { name, metaTitle, metaDescription, h1Title } = await req.json();
-  
-  if (!name || !metaTitle || !metaDescription || !h1Title) {
+  const { name, homeh3s, title, description, h1 } = await req.json();
+
+  if (!name || !homeh3s || !title || !description || !h1) {
     return NextResponse.json(
       { message: "All fields are required" },
       { status: 400 }
     );
   }
-  
+
   const slug = name.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
-  
+
   try {
-    // Check if category with same name or slug already exists
-    const existingCategory = await MainCategory.findOne({
-      $or: [{ name }, { slug }]
+    const existingCategory = await Category.findOne({
+      $or: [{ name }, { slug }],
     });
-    
+
     if (existingCategory) {
       return NextResponse.json(
         { message: "Category with this name or slug already exists" },
         { status: 400 }
       );
     }
-    
-    const category = await MainCategory.create({
+
+    // Generate incremented category id (highest one)
+    const allCategories = await Category.find({}, { id: 1 }).lean();
+
+    let maxCategoryId = 0;
+    allCategories.forEach((cat) => {
+      const parsedId = parseInt(cat.id);
+      if (!isNaN(parsedId) && parsedId > maxCategoryId) {
+        maxCategoryId = parsedId;
+      }
+    });
+
+    const nextId = (maxCategoryId + 1).toString();
+    const currentTimestamp = new Date().toISOString();
+
+    const category = await Category.create({
+      id: nextId,
       name,
       slug,
-      metaTitle,
-      metaDescription,
-      h1Title
+      homeh3s,
+      title,
+      description,
+      h1,
+      created_at: currentTimestamp,
+      updated_at: currentTimestamp,
     });
-    
+
     return NextResponse.json(
       { category, message: "Category created successfully" },
       { status: 201 }

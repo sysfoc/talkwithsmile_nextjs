@@ -11,9 +11,10 @@ const AddCategory = () => {
   const [errorMessage, setErrorMessage] = React.useState("");
   const [formData, setFormData] = React.useState({
     name: "",
-    metaTitle: "",
-    metaDescription: "",
-    h1Title: "",
+    homeh3s: "",
+    title: "",
+    description: "",
+    h1: "",
   });
   const router = useRouter();
 
@@ -70,44 +71,58 @@ const AddCategory = () => {
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='metaTitle'>Meta Title</Label>
+          <Label htmlFor='homeh3s'>Home H3s</Label>
           <Input
             type='text'
-            id='metaTitle'
-            name='metaTitle'
+            id='homeh3s'
+            name='homeh3s'
+            placeholder='Enter Home H3s'
+            className='border border-black placeholder:text-black'
+            required
+            autoComplete='off'
+            value={formData.homeh3s}
+            onChange={handleChange}
+          />
+        </div>
+        <div className='flex flex-col gap-2'>
+          <Label htmlFor='title'>Meta Title</Label>
+          <Input
+            type='text'
+            id='title'
+            name='title'
             placeholder='Enter Meta Title'
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.metaTitle}
+            value={formData.title}
             onChange={handleChange}
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='metaDescription'>Meta Description</Label>
+          <Label htmlFor='description'>Meta Description</Label>
           <Input
             type='text'
-            id='metaDescription'
-            name='metaDescription'
+            id='description'
+            name='description'
             placeholder='Enter Meta Description'
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.metaDescription}
+            value={formData.description}
             onChange={handleChange}
           />
         </div>
         <div className='flex flex-col gap-2'>
-          <Label htmlFor='h1Title'>H1 Title</Label>
+          <Label htmlFor='h1'>H1 Title</Label>
           <Input
             type='text'
-            id='h1Title'
-            name='h1Title'
+            id='h1'
+            name='h1'
             placeholder='Enter H1 Title'
             className='border border-black placeholder:text-black'
             required
             autoComplete='off'
-            value={formData.h1Title}
+            value={formData.h1}
             onChange={handleChange}
           />
         </div>

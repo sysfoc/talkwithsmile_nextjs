@@ -1,5 +1,5 @@
 // app/api/v1/category/update/[id]/route.ts
-import MainCategory from "@/app/model/MainCategory.model";
+import Category from "@/app/model/Category.model";
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
 
@@ -10,17 +10,16 @@ export async function PATCH(
   try {
     await connectToDatabase();
     const { id } = await params;
-    const { name, metaTitle, metaDescription, h1Title } = await request.json();
+    const { name, homeh3s, title, description, h1 } = await request.json();
     
-    if (!name || !metaTitle || !metaDescription || !h1Title) {
+    if (!name || !homeh3s || !title || !description || !h1) {
       return NextResponse.json(
         { message: "All fields are required" },
         { status: 400 }
       );
     }
     
-    // Check if category exists
-    const category = await MainCategory.findById(id);
+    const category = await Category.findOne({ id });
     if (!category) {
       return NextResponse.json(
         { message: "Category not found" },
@@ -30,9 +29,8 @@ export async function PATCH(
     
     const slug = name.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
     
-    // Check if another category with same name or slug exists (excluding current category)
-    const existingCategory = await MainCategory.findOne({
-      _id: { $ne: id },
+    const existingCategory = await Category.findOne({
+      id: { $ne: id },
       $or: [{ name }, { slug }]
     });
     
@@ -43,15 +41,16 @@ export async function PATCH(
       );
     }
     
-    // Update the category
-    const updatedCategory = await MainCategory.findByIdAndUpdate(
-      id,
+    const updatedCategory = await Category.findOneAndUpdate(
+      { id },
       {
         name,
         slug,
-        metaTitle,
-        metaDescription,
-        h1Title
+        homeh3s,
+        title,
+        description,
+        h1,
+        updated_at: new Date().toISOString(),
       },
       { new: true }
     );

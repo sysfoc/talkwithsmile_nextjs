@@ -1,3 +1,4 @@
+// FILE 5: app/(public)/pages/Detail.tsx
 "use client";
 import Sidebar from "@/app/(public)/components/home/Sidebar";
 import HeroSection from "@/app/(public)/components/detail/HeroSection";
@@ -7,14 +8,15 @@ import CommentSection from "@/app/(public)/components/detail/CommentSection";
 interface Props {
   blog: any;
 }
-const Detail = ({blog}: Props) => {
+
+const Detail = ({ blog }: Props) => {
   return (
     <section>
       <HeroSection blog={blog} />
-      <section className='mx-4 md:mx-12 my-8 flex flex-wrap md:flex-nowrap justify-between gap-x-6 gap-y-5'>
-        <div className='w-full md:w-[68%]'>
+      <section className="mx-4 md:mx-12 my-8 flex flex-wrap md:flex-nowrap justify-between gap-x-6 gap-y-5">
+        <div className="w-full md:w-[68%]">
           <DetailContent blogDetail={blog?.content} />
-          <CommentSection postId={blog?._id} />
+          <CommentSection postId={blog?.id || blog?._id} />
         </div>
         <Sidebar />
       </section>
