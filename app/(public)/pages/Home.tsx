@@ -6,6 +6,8 @@ import FeaturedBlogs from "@/app/(public)/components/home/FeaturedBlogs";
 import LatestPosts from "@/app/(public)/components/home/LatestPosts";
 import Sidebar from "@/app/(public)/components/home/Sidebar";
 
+export const dynamic = 'force-dynamic';
+
 const URLs = [
   "/api/v1/blog/get/latest-posts",
   "/api/v1/blog/get/category-blogs",
