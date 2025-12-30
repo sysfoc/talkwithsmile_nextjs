@@ -33,7 +33,7 @@ const HeroSection = ({ data: blogs, loading }: Props) => {
           >
             <Image
               src={`/storage/blogpostimages/${blog?.image}`}
-              alt={`${blog?.title}-img`}
+              alt={`${blog?.h1}-img`}
               fill
               className="object-cover rounded-xl group-hover:scale-105 transition-all duration-500 ease-in-out"
               fetchPriority="high"

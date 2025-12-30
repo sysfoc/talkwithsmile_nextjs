@@ -55,7 +55,7 @@ const Recent = ({ data: blogs, loading }: Props) => {
                 <div className="w-[65px] h-[65px] rounded-full overflow-hidden relative shrink-0">
                   <Image
                     src={`/storage/blogpostimages/${post?.image}`}
-                    alt={`${post?.title}-img`}
+                    alt={`${post?.h1}-img`}
                     fill
                     className='object-cover'
                     sizes='65px'

@@ -87,7 +87,7 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
                     <div className="relative w-full h-60">
                       <Image
                         src={`/storage/blogpostimages/${post?.image}`}
-                        alt="image"
+                        alt={`${post?.h1}-img`}
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover rounded-xl"

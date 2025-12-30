@@ -89,7 +89,7 @@ const FeaturedBlogs = ({ data: featuredBlogs, loading }: Props) => {
                     <div className="w-full sm:w-[200px] h-[200px] sm:h-[150px] relative shrink-0 rounded-lg overflow-hidden">
                       <Image
                         src={`/storage/blogpostimages/${blog?.image}`}
-                        alt={`${blog?.title}-img`}
+                        alt={`${blog?.h1}-img`}
                         fill
                         className="object-cover hover:scale-110 transition-transform duration-500"
                         quality={75}

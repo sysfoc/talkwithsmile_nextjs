@@ -48,7 +48,7 @@ const LatestPosts = ({ data }: PostProps) => {
                   <div className="w-full h-[200px] rounded-md overflow-hidden relative shrink-0">
                     <Image
                       src={`/storage/blogpostimages/${blog?.image}`}
-                      alt={`${blog?.title}-img`}
+                      alt={`${blog?.h1}-img`}
                       fill
                       className="object-cover"
                       fetchPriority="high"
