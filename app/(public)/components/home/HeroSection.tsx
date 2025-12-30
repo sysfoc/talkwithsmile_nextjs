@@ -36,10 +36,11 @@ const HeroSection = ({ data: blogs, loading }: Props) => {
               alt={`${blog?.title}-img`}
               fill
               className="object-cover rounded-xl group-hover:scale-105 transition-all duration-500 ease-in-out"
+              fetchPriority="high"
               priority
               loading="eager"
               sizes="(max-width: 768px) 100vw, 100vw"
-              quality={75}
+              quality={70}
             />
             <div className="absolute inset-0 bg-black/40 rounded-xl" />
             <div className="absolute inset-0 flex flex-col gap-y-5 justify-end p-5 md:p-10 text-white">
