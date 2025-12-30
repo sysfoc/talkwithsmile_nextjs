@@ -10,7 +10,7 @@ interface Props {
 
 const EditorsPick = ({ data: blogs, loading }: Props) => {
   console.log("EditorsPick data:", blogs); // Debug log
-  
+
   return (
     <section className="mt-12">
       <div className="my-4">
@@ -89,6 +89,7 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
                         src={`/storage/blogpostimages/${post?.image}`}
                         alt="image"
                         fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover rounded-xl"
                       />
                     </div>
@@ -108,15 +109,22 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
                       </div>
                       <div className="w-1 h-1 rounded-full bg-[#FE4F70]" />
                       <p className="text-sm">
-                        {new Date(post?.created_at).toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })}
+                        {new Date(post?.created_at).toLocaleDateString(
+                          "en-US",
+                          {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          }
+                        )}
                       </p>
                     </div>
                     <div>
-                      <Link href={`/${post?.category?.slug || 'blog'}/${post?.slug}`}>
+                      <Link
+                        href={`/${post?.category?.slug || "blog"}/${
+                          post?.slug
+                        }`}
+                      >
                         <h3 className="font-bold text-xl hover:text-[#FE4F70] transition-colors">
                           {post?.title?.length > 48
                             ? `${post.title.slice(0, 48)}...`
@@ -151,11 +159,16 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
                           className="object-cover"
                           fetchPriority="high"
                           priority
-                          sizes="100px"
+                          sizes="(max-width: 768px) 152px, 100px"
+                          quality={85}
                         />
                       </div>
                       <div>
-                        <Link href={`/${post?.category?.slug || 'blog'}/${post?.slug}`}>
+                        <Link
+                          href={`/${post?.category?.slug || "blog"}/${
+                            post?.slug
+                          }`}
+                        >
                           <h3 className="font-bold hover:text-[#FE4F70] transition-colors">
                             {post?.title?.length > 48
                               ? `${post.title.slice(0, 48)}...`
