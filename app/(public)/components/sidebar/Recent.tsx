@@ -58,8 +58,9 @@ const Recent = ({ data: blogs, loading }: Props) => {
                     alt={`${post?.title}-img`}
                     fill
                     className="object-cover"
-                    fetchPriority="high"
-                    priority
+                    sizes='65px'
+                    quality={75}
+                    priority={index < 2}
                   />
                 </div>
                 <div>
