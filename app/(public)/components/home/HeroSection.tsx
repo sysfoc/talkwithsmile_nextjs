@@ -1,4 +1,3 @@
-
 // FILE: app/(public)/components/home/HeroSection.tsx
 "use client";
 import Image from "next/image";
@@ -10,7 +9,6 @@ interface Props {
 }
 
 const HeroSection = ({ data: blogs, loading }: Props) => {
-  console.log("HeroSection data:", blogs); // Debug log
   
   return (
     <div>
@@ -39,7 +37,9 @@ const HeroSection = ({ data: blogs, loading }: Props) => {
               fill
               className="object-cover rounded-xl group-hover:scale-105 transition-all duration-500 ease-in-out"
               priority
-              fetchPriority="high"
+              loading="eager"
+              sizes="(max-width: 768px) 100vw, 100vw"
+              quality={75}
             />
             <div className="absolute inset-0 bg-black/40 rounded-xl" />
             <div className="absolute inset-0 flex flex-col gap-y-5 justify-end p-5 md:p-10 text-white">
