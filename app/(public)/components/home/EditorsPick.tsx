@@ -15,7 +15,7 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
     <section className="mt-12">
       <div className="my-4">
         <div className="flex items-center">
-          <h3 className="text-2xl font-bold">Recent Posts</h3>
+          <h2 className="text-2xl font-bold">Recent Posts</h2>
         </div>
         <div className="mt-2">
           <svg width="33" height="6" xmlns="https://www.w3.org/2000/svg">
@@ -117,11 +117,11 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
                     </div>
                     <div>
                       <Link href={`/${post?.category?.slug || 'blog'}/${post?.slug}`}>
-                        <h4 className="font-bold text-xl hover:text-[#FE4F70] transition-colors">
+                        <h3 className="font-bold text-xl hover:text-[#FE4F70] transition-colors">
                           {post?.title?.length > 48
                             ? `${post.title.slice(0, 48)}...`
                             : post?.title}
-                        </h4>
+                        </h3>
                       </Link>
                       <div className="mt-2 text-gray-500 line-clamp-2 md:line-clamp-3">
                         <p
@@ -161,7 +161,7 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
                               : post?.title}
                           </h3>
                         </Link>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-gray-600 mt-1">
                           {new Date(post?.created_at).toLocaleDateString(
                             "en-US",
                             {

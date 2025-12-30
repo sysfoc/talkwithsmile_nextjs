@@ -16,7 +16,7 @@ const FeaturedBlogs = ({ data: featuredBlogs, loading }: Props) => {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-x-2">
-              <h3 className="text-xl sm:text-2xl font-bold">Featured Posts</h3>
+              <h2 className="text-xl sm:text-2xl font-bold">Featured Posts</h2>
             </div>
             <div className="mt-2">
               <svg width="33" height="6" xmlns="http://www.w3.org/2000/svg">
@@ -102,9 +102,9 @@ const FeaturedBlogs = ({ data: featuredBlogs, loading }: Props) => {
                     <div className="flex-1 flex flex-col justify-between py-1">
                       <div>
                         <Link href={`/${blog?.category?.slug || 'blog'}/${blog?.slug}`}>
-                          <h4 className="font-bold text-lg sm:text-xl leading-tight hover:text-[#FE4F70] transition-colors line-clamp-2">
+                          <h3 className="font-bold text-lg sm:text-xl leading-tight hover:text-[#FE4F70] transition-colors line-clamp-2">
                             {blog?.title}
-                          </h4>
+                          </h3>
                         </Link>
                         <p className="text-sm text-gray-500 mt-2 line-clamp-2">
                           {blog?.description}

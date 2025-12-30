@@ -13,7 +13,7 @@ const LatestPosts = ({ data }: PostProps) => {
         <div key={index}>
           <div className="my-4">
             <div className="flex items-center">
-              <h3 className="text-2xl font-bold capitalize">{category.name}</h3>
+              <h2 className="text-2xl font-bold capitalize">{category.name}</h2>
             </div>
             <div className="mt-2">
               <svg width="33" height="6" xmlns="https://www.w3.org/2000/svg">
