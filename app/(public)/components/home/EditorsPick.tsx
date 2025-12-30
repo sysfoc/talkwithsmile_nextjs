@@ -91,6 +91,7 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover rounded-xl"
+                        quality={75}
                       />
                     </div>
                     <div className="my-3 flex items-center gap-x-5">
@@ -160,7 +161,7 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
                           fetchPriority="high"
                           priority
                           sizes="(max-width: 768px) 152px, 100px"
-                          quality={85}
+                          quality={75}
                         />
                       </div>
                       <div>

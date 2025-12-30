@@ -53,6 +53,7 @@ const LatestPosts = ({ data }: PostProps) => {
                       className="object-cover"
                       fetchPriority="high"
                       priority
+                      quality={65}
                     />
                     <div className="absolute top-4 left-4">
                       <button className="w-fit py-2 px-4 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white rounded-full text-sm capitalize">

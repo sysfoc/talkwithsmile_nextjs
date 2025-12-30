@@ -56,15 +56,16 @@ const Recent = ({ data: blogs, loading }: Props) => {
                   <Image
                     src={`/storage/blogpostimages/${post?.image}`}
                     alt={`${post?.title}-img`}
-                    fill
+                    width={65}
+                    height={65}
                     className="object-cover"
-                    sizes='65px'
+                    sizes="(max-width: 768px) 65px, 65px"
                     quality={75}
                     priority={index < 2}
                   />
                 </div>
                 <div>
-                   <Link href={`/${post?.category?.slug}/${post?.slug}`}>
+                  <Link href={`/${post?.category?.slug}/${post?.slug}`}>
                     <h3 className="font-bold">{post?.title}</h3>
                   </Link>
                   <p className="text-xs text-gray-600 mt-1">

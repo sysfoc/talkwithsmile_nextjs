@@ -80,7 +80,9 @@ const FeaturedBlogs = ({ data: featuredBlogs, loading }: Props) => {
                 <div
                   key={index}
                   className={`${
-                    index !== 0 ? "pt-4 sm:pt-5 border-t border-gray-200/70" : ""
+                    index !== 0
+                      ? "pt-4 sm:pt-5 border-t border-gray-200/70"
+                      : ""
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 p-3 -m-3 rounded-lg hover:bg-gray-50 transition-all duration-300">
@@ -90,6 +92,8 @@ const FeaturedBlogs = ({ data: featuredBlogs, loading }: Props) => {
                         alt={`${blog?.title}-img`}
                         fill
                         className="object-cover hover:scale-110 transition-transform duration-500"
+                        quality={75}
+                        sizes="(max-width: 640px) 100vw, 200px"
                       />
                       <div className="absolute top-3 left-3">
                         <span className="px-3 py-1 bg-gradient-to-r from-[#FE4F70] to-[#FFA387] text-white text-xs font-semibold rounded-full flex items-center gap-1">
@@ -101,7 +105,11 @@ const FeaturedBlogs = ({ data: featuredBlogs, loading }: Props) => {
 
                     <div className="flex-1 flex flex-col justify-between py-1">
                       <div>
-                        <Link href={`/${blog?.category?.slug || 'blog'}/${blog?.slug}`}>
+                        <Link
+                          href={`/${blog?.category?.slug || "blog"}/${
+                            blog?.slug
+                          }`}
+                        >
                           <h3 className="font-bold text-lg sm:text-xl leading-tight hover:text-[#FE4F70] transition-colors line-clamp-2">
                             {blog?.title}
                           </h3>
@@ -152,4 +160,3 @@ const FeaturedBlogs = ({ data: featuredBlogs, loading }: Props) => {
 };
 
 export default FeaturedBlogs;
-
