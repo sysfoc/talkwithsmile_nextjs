@@ -52,14 +52,15 @@ const Popular = ({ data: blogs, loading }: PopularProps) => {
                 key={index}
                 className="flex items-center gap-x-5 border-t border-gray-200/70 py-4"
               >
-                <div className="w-[65px] h-[65px] rounded-full overflow-hidden relative shrink-0">
+                <div className='w-[65px] h-[65px] rounded-full overflow-hidden relative shrink-0'>
                   <Image
                     src={`/storage/blogpostimages/${post?.image}`}
                     alt={`${post?.title}-img`}
                     fill
-                    className="object-cover"
-                    fetchPriority="high"
-                    priority
+                    className='object-cover'
+                    sizes='65px'
+                    quality={75}
+                    priority={index < 2}
                   />
                 </div>
                 <div>

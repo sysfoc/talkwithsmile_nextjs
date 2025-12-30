@@ -151,6 +151,7 @@ const EditorsPick = ({ data: blogs, loading }: Props) => {
                           className="object-cover"
                           fetchPriority="high"
                           priority
+                          sizes="100px"
                         />
                       </div>
                       <div>
