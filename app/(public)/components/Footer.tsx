@@ -56,7 +56,7 @@ const Footer = () => {
           <div className='flex items-center gap-x-6'>
             <div>
               <Link
-                href='https://www.facebook.com/networthmamadotcom'
+                href='https://www.facebook.com/smiletotalk'
                 target='_blank'
                 aria-label='Facebook'
               >
@@ -64,35 +64,17 @@ const Footer = () => {
               </Link>
             </div>
             <div>
-              <Link
-                href='https://www.instagram.com/nethworthmama/'
-                target='_blank'
-                aria-label='Instagram'
-              >
-                <FaInstagram size={20} className='text-gray-300 hover:text-gray-100 transition-colors' />
-              </Link>
-            </div>
-            <div>
-              <Link href='https://x.com/networthMama' target='_blank' aria-label='Twitter'>
+              <Link href='https://x.com/smiletotalk' target='_blank' aria-label='Twitter'>
                 <FaXTwitter size={20} className='text-gray-300 hover:text-gray-100 transition-colors' />
               </Link>
             </div>
             <div>
               <Link
-                href='https://www.pinterest.com/networthmama/'
+                href='https://www.pinterest.com/smiletotalk/'
                 target='_blank'
                 aria-label='Pinterest'
               >
                 <FaPinterest size={20} className='text-gray-300 hover:text-gray-100 transition-colors' />
-              </Link>
-            </div>
-            <div>
-              <Link
-                href='https://www.youtube.com/@Networthmama.'
-                target='_blank'
-                aria-label='Youtube'
-              >
-                <FaYoutube size={20} className='text-gray-300 hover:text-gray-100 transition-colors' />
               </Link>
             </div>
           </div>
