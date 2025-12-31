@@ -12,8 +12,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Next Blogging Application",
-  description: "Getting Started ...",
+  title: "TalkWithSmile – Funny Memes, Inspiring Quotes & Unique Gift Ideas",
+  description: "Discover TalkWithSmile – your go-to source for hilarious memes, uplifting quotes, unique gift ideas, and easy how-to guides",
 };
 
 export default function RootLayout({

@@ -11,7 +11,7 @@ import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <footer className='shadow-sm'>
+    <footer className='shadow-md bg-[#030712]'>
       <div className='mx-4 md:mx-12'>
         <div className='flex items-center justify-between flex-wrap gap-x-6 gap-y-5 py-6'>
           <Link href="/">
@@ -26,29 +26,29 @@ const Footer = () => {
             />
           </Link>
           <div className='flex flex-wrap items-center gap-x-6'>
-            <Link href='/about-us' className='text-sm text-gray-500'>
+            <Link href='/about-us' className='text-sm text-gray-300 hover:text-gray-100 transition-colors'>
               About
             </Link>
-            <Link href='/contact-us' className='text-sm text-gray-500'>
+            <Link href='/contact-us' className='text-sm text-gray-300 hover:text-gray-100 transition-colors'>
               Contact us
             </Link>
             <Link
               href='/terms-and-conditions'
-              className='text-sm text-gray-500'
+              className='text-sm text-gray-300 hover:text-gray-100 transition-colors'
             >
               Terms
             </Link>
-            <Link href='/privacy-policy' className='text-sm text-gray-500'>
+            <Link href='/privacy-policy' className='text-sm text-gray-300 hover:text-gray-100 transition-colors'>
               Privacy Policy
             </Link>
           </div>
         </div>
-        <div className='border-t' />
+        <div className='border-t border-gray-700' />
         <div className='py-6 flex items-center justify-between gap-5 flex-wrap'>
           <div>
-            <p className='text-sm text-gray-500'>
+            <p className='text-sm text-gray-400'>
               © 2025 All rights reserved. Powered by{" "}
-              <Link href='https://www.sysfoc.com' target='_blank'>
+              <Link href='https://www.sysfoc.com' target='_blank' className='text-gray-300 hover:text-gray-100 transition-colors'>
                 SYSFOC
               </Link>
             </p>
@@ -60,7 +60,7 @@ const Footer = () => {
                 target='_blank'
                 aria-label='Facebook'
               >
-                <FaFacebook size={20} className='text-gray-500' />
+                <FaFacebook size={20} className='text-gray-300 hover:text-gray-100 transition-colors' />
               </Link>
             </div>
             <div>
@@ -69,12 +69,12 @@ const Footer = () => {
                 target='_blank'
                 aria-label='Instagram'
               >
-                <FaInstagram size={20} className='text-gray-500' />
+                <FaInstagram size={20} className='text-gray-300 hover:text-gray-100 transition-colors' />
               </Link>
             </div>
             <div>
               <Link href='https://x.com/networthMama' target='_blank' aria-label='Twitter'>
-                <FaXTwitter size={20} className='text-gray-500' />
+                <FaXTwitter size={20} className='text-gray-300 hover:text-gray-100 transition-colors' />
               </Link>
             </div>
             <div>
@@ -83,7 +83,7 @@ const Footer = () => {
                 target='_blank'
                 aria-label='Pinterest'
               >
-                <FaPinterest size={20} className='text-gray-500' />
+                <FaPinterest size={20} className='text-gray-300 hover:text-gray-100 transition-colors' />
               </Link>
             </div>
             <div>
@@ -92,7 +92,7 @@ const Footer = () => {
                 target='_blank'
                 aria-label='Youtube'
               >
-                <FaYoutube size={20} className='text-gray-500' />
+                <FaYoutube size={20} className='text-gray-300 hover:text-gray-100 transition-colors' />
               </Link>
             </div>
           </div>
